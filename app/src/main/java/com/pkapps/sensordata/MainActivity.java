@@ -130,14 +130,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String timeStamp = new SimpleDateFormat("HH.mm.ss.dd.MM.yyyy").format(new Date());
                 File filegrav = new File(getExternalFilesDir(null), "gravity-"+timeStamp+".csv");
-                File filemag = new File(getExternalFilesDir(null), "magnetic-"+timeStamp+".csv");
+                File filemag = new File(getExternalFilesDir(null), "magnetometer-"+timeStamp+".csv");
                 File filepres = new File(getExternalFilesDir(null), "pressure-"+timeStamp+".csv");
-                File fileLine = new File(getExternalFilesDir(null), "linear-"+timeStamp+".csv");
+                File fileLine = new File(getExternalFilesDir(null), "linearacceleration-"+timeStamp+".csv");
                 File fileAcc = new File(getExternalFilesDir(null), "accelerometer-"+timeStamp+".csv");
                 File fileGyro = new File(getExternalFilesDir(null), "gyroscope-"+timeStamp+".csv");
                 File fileLux = new File(getExternalFilesDir(null), "light-"+timeStamp+".csv");
                 fileProx = new File(getExternalFilesDir(null), "proximity-"+timeStamp+".csv");
-                File fileRot = new File(getExternalFilesDir(null), "rotation-"+timeStamp+".csv");
+                File fileRot = new File(getExternalFilesDir(null), "rotationvector-"+timeStamp+".csv");
                 try {
                     bufgrav = new BufferedWriter(new FileWriter(filegrav));
                     bufmag = new BufferedWriter(new FileWriter(filemag));
@@ -213,8 +213,8 @@ public class MainActivity extends AppCompatActivity {
             public void onSensorChanged(SensorEvent sensorEvent) {
                 Sensor sensor = sensorEvent.sensor;
                 //String timeStamp = new SimpleDateFormat("HH.mm.ss.dd.MM.yyyy").format(new Date());
-                Timestamp time = new Timestamp(new Date().getTime());
-                String timeStamp = time.toString();
+                //Timestamp time = new Timestamp(new Date().getTime());
+                String timeStamp = Long.toString(new Date().getTime());
                 switch (sensor.getType()) {
 
                     case Sensor.TYPE_ACCELEROMETER:
@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d("Value", "isWrite" + isWriteAllowed);
                                 //StringBuilder sb = new StringBuilder();
 
-                                bufAcc.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufAcc.append("Accelerometer,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufAcc.newLine();
                                 bufAcc.flush();
                             } catch (IOException e) {
@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity {
                         text6.setText("AxisZ: " + Float.toString(sensorEvent.values[2]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufGyro.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufGyro.append("Gyroscope,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufGyro.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                         text9.setText("AxisZ: " + Float.toString(sensorEvent.values[2]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufmag.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufmag.append("Magnetometer,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufmag.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -267,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                         text10.setText("Pressure: " + Float.toString(sensorEvent.values[0]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufpres.append(timeStamp+":"+Float.toString(sensorEvent.values[0]));
+                                bufpres.append("Pressure,"+timeStamp+","+Float.toString(sensorEvent.values[0]));
                                 bufpres.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -278,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         text11.setText("Distance: " + Float.toString(sensorEvent.values[0]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufProx.append(timeStamp+":"+Float.toString(sensorEvent.values[0]));
+                                bufProx.append("Proximity,"+timeStamp+","+Float.toString(sensorEvent.values[0]));
                                 bufProx.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
                         text12.setText("LUX: " + Float.toString(sensorEvent.values[0]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufLux.append(timeStamp+":"+Float.toString(sensorEvent.values[0]));
+                                bufLux.append("Light,"+timeStamp+","+Float.toString(sensorEvent.values[0]));
                                 bufLux.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity {
                         text15.setText("AxisZ: " + Float.toString(sensorEvent.values[2]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufgrav.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufgrav.append("Gravity,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufgrav.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
                         text18.setText("AxisZ: " + Float.toString(sensorEvent.values[2]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufLine.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufLine.append("LinearAccelereation,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufLine.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                         text21.setText("AxisZ: " + Float.toString(sensorEvent.values[2]));
                         if (isWriteAllowed.get()) {
                             try {
-                                bufRot.append(timeStamp+":"+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
+                                bufRot.append("RotationVector,"+timeStamp+","+Float.toString(sensorEvent.values[0]) + "," + Float.toString(sensorEvent.values[1]) + "," + Float.toString(sensorEvent.values[2]));
                                 bufRot.newLine();
                             } catch (IOException e) {
                                 e.printStackTrace();
